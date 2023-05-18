@@ -1,0 +1,349 @@
+﻿@using TestProject.Controllers;
+
+@model ManEmpVM
+
+@{
+    ViewData["Title"] = "Thêm nhân viên";
+}
+
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link href="~/css/homestyles.css" rel="stylesheet" />
+
+<div class="wrap">
+    <div class="wrap_body">
+
+        <div class="body_managers">
+            <h3 class="group_title">Quản lý:</h3>
+
+            <input id="txtManNameSearch" placeholder="Tên quản lý" type="text" autocomplete="" name="SearchString" />
+
+            <p class="group_msg" id="manager_msg">* Bạn vui lòng thêm ít nhất 3 quản lý</p>
+            <table class="table table-striped table-hover myTable" id="managersTbl">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Tên</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.managers)
+                    {
+                        <tr>
+                            <td>@(Model.managers.IndexOf(item) + 1)</td>
+                            <td>@item.FullName</td>
+                            <td><butto class="btnDeleteItem">Delete</butto></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button class="group_addmore" id="man_add">+</button>
+        </div>
+
+        <div class="body_space"></div>
+
+        <div class="body_employees">
+
+            <h3 class="group_title">Nhân viên:</h3>
+
+            <input id="txtEmpNameSearch" placeholder="Tên nhân viên" type="text" />
+
+            <p class="group_msg" id="emp_msg">* Bạn vui lòng thêm ít nhất 30 nhân viên</p>
+
+            <table class="table table-striped table-hover myTable" id="empTbl">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Tên</td>
+                        <td>Ngày Sinh</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.employees)
+                    {
+                        <tr>
+                            <td>@(Model.employees.IndexOf(item) + 1)</td>
+                            <td>@item.FullName</td>
+                            <td>@item.Dob.ToString("dd/MM/yy")</td>
+                            <td><button class="btnDeleteItem">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button class="group_addmore" id="emp_add">+</button>
+
+        </div>
+
+        <!-- The Manager Modal -->
+        <div class="modal fade" id="AddManagerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Quản lý</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="ManFullName" class="col-form-label">Họ và tên:</label>
+                                <input type="text" class="form-control" id="ManFullName">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="btnAddManSubmit" type="button" class="btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Emp Modal -->
+        <div class="modal fade" id="AddEmpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Nhân Viên</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="EmpFullName" class="col-form-label">Họ và tên:</label>
+                                <input type="text" class="form-control" id="EmpFullName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="EmpDOB" class="col-form-label">Họ và tên:</label>
+                                <input type="date" class="form-control" id="EmpDOB">
+                            </div>
+                            <div>
+                                <p>Cấp quản lý:</p>
+                                <div id="chonQuanLy">
+                                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                    <label for="vehicle1"> I have a bike</label><br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnAddEmpSubmit">Thêm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var rowCount = $('#managersTbl > tbody > tr').length;
+            if (rowCount < 3) {
+                $("#manager_msg").css("display", "block");
+            }
+            else {
+                $("#manager_msg").css("display", "none");
+            }
+
+
+            $("#man_add").click(function () {
+                $("#ManFullName").val(null);
+                $("#AddManagerModal").modal("show");
+            });
+
+
+            $("#emp_add").click(function () {
+                $("#AddEmpModal").modal("show");
+                $("#EmpFullName").val(null);
+                $("#chonQuanLy").empty();
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SearchManByString",
+                    data: { "SearchString": "" },
+                    success: function (obj) {
+                        data = JSON.parse(obj);
+                        for (let i = 0; i < data.length; i++) {
+                            index = i + 1;
+                            manid = data[i]['ManagerId']
+                            name = data[i]['FullName']
+                            var markup = "<input type='checkbox' id='managerid-" + manid + "' name='managerid-" + manid + "'>";
+                            $("#chonQuanLy").append(markup);
+                            var mu2 = "<label for='managerid-" + manid + "' > " + name + " </label>";
+                            $("#chonQuanLy").append(mu2);
+                            $("#chonQuanLy").append("<br/>");
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+
+            $("#btnAddManSubmit").click(function () {
+                var ManName = $("#ManFullName").val();
+                if (ManName == null || ManName == '') {
+                    alert("Vui lòng nhập tên người quản lý");
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/AddMoreManager",
+                        data: { "name": ManName },
+                        success: function (response) {
+                            $("#AddManagerModal").modal("hide");
+                            var rowCount = $('#managersTbl > tbody > tr').length + 1;
+                            var markup = "<tr>\
+                                            <td>"+ rowCount + "</td>\
+                                            <td>"+ ManName + "</td>\
+                                            <td>\
+                                            <button class='btnDeleteItem'>Delete</button>\
+                                            </td>\
+                                            </tr>";
+                            $("#managersTbl").append(markup);
+                            if (rowCount < 3) {
+                                $("#manager_msg").css("display", "block");
+                            }
+                            else {
+                                $("#manager_msg").css("display", "none");
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            });
+
+
+            $("#btnAddEmpSubmit").click(function () {
+                var empName = $("#EmpFullName").val();
+                if (empName == null || empName == '') {
+                    alert("Vui lòng nhập tên nhân viên");
+                    return;
+                }
+                var dob = $("#EmpDOB").val()
+                if (dob == null || dob == '') {
+                    alert('Vui lòng chọn ngay sinh')
+                    return;
+                }
+                
+                var manIDs = []
+                var manEles = $("#chonQuanLy").children("input").each(function () {
+                    if (this.checked){
+                        id = this.id;
+                        ID = parseInt(id.split("-")[1])
+                        manIDs.push(ID);
+                    }
+                });
+
+                var dt = JSON.stringify({ 'EmpName': empName, 'EmpDOB': dob, 'IDs': manIDs });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/InsertEmpAndRelateTable",
+                    data: {'data': dt},
+                    success: function (obj) {
+                        $("#AddEmpModal").modal("hide");
+                        refreshEmpTbl("");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+
+            $("#txtManNameSearch").keyup(function () {
+                var prefix = $("#txtManNameSearch").val()
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SearchManByString",
+                    data: { "SearchString": prefix },
+                    success: function (obj) {
+                        $("#managersTbl").find("tr:gt(0)").remove()
+                        data = JSON.parse(obj);
+                        for (let i = 0; i < data.length; i++) {
+                            index = i + 1;
+                            var markup = "<tr>\
+                                                <td>"+ index + "</td>\
+                                                <td>"+ data[i]['FullName'] + "</td>\
+                                                <td>\
+                                                <button class='btnDeleteItem'>Delete</button>\
+                                                </td>\
+                                                </tr>";
+                            $("#managersTbl").append(markup);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+
+            $("#txtEmpNameSearch").keyup(function () {
+                var prefix = $("#txtEmpNameSearch").val()
+                refreshEmpTbl(prefix);
+            });
+
+
+            function refreshEmpTbl(prefix){
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SearchEmpByString",
+                    data: { "SearchString": prefix },
+                    success: function (obj) {
+                        $("#empTbl").find("tr:gt(0)").remove()
+                        data = JSON.parse(obj);
+                        for (let i = 0; i < data.length; i++) {
+                            index = i + 1;
+                            name = data[i]['FullName']
+                            dob = data[i]['Dob'].toString()
+                            var markup = "<tr>\
+                                                    <td>"+ index + "</td>\
+                                                    <td>"+ name + "</td>\
+                                                    <td>"+ dob + "</td>\
+                                                    <td>\
+                                                        <button class='btnDeleteItem'>Delete</button>\
+                                                    </td>\
+                                                </tr>";
+                            $("#empTbl").append(markup);
+                        }
+                        if (data.length < 30) {
+                            $("#emp_msg").css("display", "block");
+                        }
+                        else {
+                            $("#emp_msg").css("display", "none");
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+
+        });
+    </script>
+
+</div>

@@ -1,0 +1,94 @@
+﻿@import url('cssroot.css');
+
+html {
+    font-size: 16.5px;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+
+.wrap{
+    width: 100vw;
+    height: 100%;
+    padding: 16px;
+    position: relative;
+}
+
+.wrap .wrap_title {
+    color: var(--title-color);
+    font-size: var(--title-fontsize);
+}
+
+.wrap_body{
+    margin-top: 1rem;
+    display: flex;
+}
+
+.group_title {
+    font-size: var(--group-title-fontsize);
+    color: var(--group-title-color);
+    text-decoration: underline;
+}
+
+.group_msg {
+    color: var(--msg-color);
+    font-size: var(--msg-fontsize);
+    font-style: italic;
+}
+
+.body_managers {
+    width: 49%;
+    position: relative;
+    padding-bottom: 100px;
+}
+
+.body_space{
+    width: 2%;
+}
+
+.body_employees {
+    width: 49%;
+    position: relative;
+}
+
+.myTable {
+}
+
+.group_addmore {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 1.5rem;
+    border-color: transparent;
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    font-size: var(--button-fontsize);
+    padding: 0px;
+    box-shadow: 1px 1px #888888;
+    right: 0;
+    position: absolute;
+}
+
+.wrap_continue{
+    position: fixed;
+    bottom: var(--header-heigh);
+    right: 16px;
+    height: 50px;
+    width: 200px;
+    border-radius: 20px;
+    background-color: yellow;
+    color: green;
+    font-size: 20px;
+    border-color: transparent;
+    opacity: .7;
+}
+
+.btnDeleteItem{
+    border-color: transparent;
+    text-decoration: underline;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}

@@ -1,0 +1,67 @@
+﻿@import url('cssroot.css');
+
+body {
+}
+
+.body-layout {
+    padding: 0px;
+}
+
+header {
+    display: flex;
+    justify-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: var(--header-heigh);
+    background-color: lightblue;
+    z-index: 10;
+}
+
+header h3{
+    line-height: var(--header-heigh);
+    font-size: 25px;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+header ul li {
+    float: left;
+}
+
+header ul li a {
+    padding: 0px 16px;
+    line-height: var(--header-heigh);
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+.mybody {
+    position: absolute;
+    top: var(--header-heigh);
+    bottom: var(--header-heigh);
+}
+
+footer {
+    height: var(--header-heigh);
+    background-color: lightblue;
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    padding: 0px 16px;
+}
+
+footer p a{
+    line-height: var(--header-heigh);
+}

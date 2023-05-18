@@ -1,0 +1,32 @@
+﻿@model List<SumaryModel>
+
+@{
+    ViewData["Title"] = "Danh sách nhân viên";
+}
+
+
+<div class="container">
+    <p>Đây là toàn bộ danh sách nhân viên cùng cương vị được giao của mỗi người</p>
+
+    <table class="table table-striped table-hover myTable" id="managersTbl">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>Người quản lý</td>
+                <td>Tên Nhân viên</td>
+                <td>Sinh nhật Nhân viên</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(Model.IndexOf(item) + 1)</td>
+                    <td>@item.ManName</td>
+                    <td>@item.EmpName</td>
+                    <td>@item.EmpDOB.ToString("d/MM/yy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

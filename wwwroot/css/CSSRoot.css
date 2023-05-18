@@ -1,0 +1,23 @@
+﻿:root{
+    --background-color: white;
+    --text-color: #808080;
+    --title-color: blue;
+    --group-title-color: green;
+    --table-heade-color: blue;
+    --table-line-color: lightgray;
+    --table-text-color: black;
+    --msg-color: red;
+    --button-background: yellow;
+    --button-text-color: green;
+}
+
+:root {
+    --header-heigh: 60px;
+    --bottom-heiht: 60px;
+    --title-fontsize: 25px;
+    --group-title-fontsize: 20px;
+    --msg-fontsize: 13px;
+    --table-head-fontsize: 16px;
+    --table-content-fontsize: 15px;
+    --button-fontsize: 25px;
+}
